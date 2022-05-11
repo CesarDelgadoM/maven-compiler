@@ -14,6 +14,7 @@ const (
 )
 
 var currentPath string
+var pathFolder string
 var files []string
 
 func MenuFiles() {
@@ -28,10 +29,12 @@ func MenuFiles() {
 		case 1:
 			CreateCompilerFile()
 		case 2:
-			EditCompilerFile()
+			OpenCompilerFile()
 		case 3:
-			DeleteCompilerFile()
+			EditCompilerFile()
 		case 4:
+			DeleteCompilerFile()
+		case 5:
 			ListCompilerFiles()
 		case 0:
 			Info("Saliendo...")
@@ -48,9 +51,9 @@ func CreateCompilerFile() {
 	fileName := InputText("Digite el nombre del proyecto: ")
 	PrintLine()
 
-	pathFinal := currentPath + separator + nameFolder + separator + fileName + formatFile
+	path := pathFolder + separator + fileName + formatFile
 
-	file, err := os.Create(pathFinal)
+	file, err := os.Create(path)
 	if err != nil {
 		Error("Cannot create file [" + fileName + "]: " + err.Error())
 		return
@@ -71,7 +74,7 @@ func CreateCompilerFile() {
 func EditCompilerFile() {
 
 	CreateMenu(files)
-	op := InputNumber("[editar archivo] :: ")
+	op := InputNumber("[editar] :: ")
 	if op <= 0 || op > len(files) {
 		if op == 0 {
 			Info("Saliendo...")
@@ -82,7 +85,7 @@ func EditCompilerFile() {
 	}
 	fileName := files[op-1]
 
-	path := currentPath + separator + nameFolder + separator + fileName
+	path := pathFolder + separator + fileName
 
 	file, err := os.OpenFile(path, os.O_RDWR, 0600)
 	if err != nil {
@@ -102,18 +105,71 @@ func EditCompilerFile() {
 	fmt.Print("Rutas: ")
 	fmt.Scanln(&pathsProjects)
 
-	err = file.Truncate(0)
-	_, err = file.WriteString(pathsProjects)
-	if err != nil {
-		Error("Cannot edit file: " + err.Error())
+	if pathsProjects != "" {
+		err = file.Truncate(0)
+		_, err = file.WriteString(pathsProjects)
+		if err != nil {
+			Error("Cannot edit file: " + err.Error())
+		}
+		Info("File edited successful")
+	} else {
+		Info("File not edited, no data")
 	}
 	file.Close()
+}
 
-	Info("File edited successful")
+func OpenCompilerFile() {
+
+	CreateMenu(files)
+
+	op := InputNumber("[abrir] :: ")
+	if op <= 0 || op > len(files) {
+		if op == 0 {
+			Info("Saliendo...")
+		} else {
+			Error("Option index out of bounds")
+		}
+		return
+	}
+
+	fileName := files[op-1]
+	path := pathFolder + separator + fileName
+
+	content, err := os.ReadFile(path)
+	if err != nil {
+		Error("Cannot read the file: " + err.Error())
+		return
+	}
+
+	PrintLine()
+	fmt.Println(string(content))
+	PrintLine()
 }
 
 func DeleteCompilerFile() {
 
+	CreateMenu(files)
+
+	op := InputNumber("[eliminar] :: ")
+	if op <= 0 || op > len(files) {
+		if op == 0 {
+			Info("Saliendo...")
+		} else {
+			Error("Option index out of bounds")
+		}
+		return
+	}
+	fileName := files[op-1]
+
+	path := pathFolder + separator + fileName
+
+	err := os.Remove(path)
+	if err != nil {
+		Error("Cannot delete file: " + err.Error())
+	} else {
+		ReadDirectory()
+		Info("File deleted successful")
+	}
 }
 
 func ListCompilerFiles() {
@@ -137,7 +193,7 @@ func InitializeApp() {
 	currentPath = path
 
 	// Create folder if not exist
-	path = currentPath + separator + nameFolder
+	pathFolder = currentPath + separator + nameFolder
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		err = os.Mkdir(path, os.ModePerm)
 		if err != nil {
@@ -146,14 +202,18 @@ func InitializeApp() {
 		}
 	}
 
-	// Reads the directory to fill the list of compiler files
-	filesInfo, err := ioutil.ReadDir(currentPath + separator + nameFolder)
-	fmt.Println(filesInfo)
+	ReadDirectory()
+}
+
+// Reads the directory to fill the list of compiler files
+func ReadDirectory() {
+	filesInfo, err := ioutil.ReadDir(pathFolder)
 	if err != nil {
 		Error("Cannot read the directory: " + err.Error())
 		return
 	}
 
+	files = nil
 	for _, file := range filesInfo {
 		if strings.Contains(file.Name(), ".txt") {
 			files = append(files, file.Name())

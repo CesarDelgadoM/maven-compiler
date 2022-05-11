@@ -36,18 +36,18 @@ func main() {
 func CompileProject() {
 
 	CreateMenu(files)
-	op := InputNumber("[opcion] :: ")
-	if op <= 0 || op > len(files) {
-		if op == 0 {
+	op1 := InputNumber("[compilar] :: ")
+	if op1 <= 0 || op1 > len(files) {
+		if op1 == 0 {
 			Info("Saliendo...")
 		} else {
 			Error("Option index out of bounds")
 		}
 		return
 	}
-	fileName := files[op-1]
 
-	path := currentPath + separator + nameFolder + separator + fileName
+	fileName := files[op1-1]
+	path := pathFolder + separator + fileName
 
 	content, err := os.ReadFile(path)
 	if err != nil {
@@ -73,7 +73,6 @@ func CompileProject() {
 			err = Compile(pathsProjects[i], profile)
 		} else {
 			err = Compile(pathsProjects[i], "")
-
 		}
 		if err != nil {
 			Error("project compilation failed: " + err.Error())
