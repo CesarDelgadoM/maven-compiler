@@ -67,6 +67,7 @@ func CompileProject() {
 	size := len(pathsProjects)
 
 	for i := 0; i < size; i++ {
+		cls()
 		Info("Compilando el proyecto: " + pathsProjects[i])
 
 		if i == size-1 && profile != "" {

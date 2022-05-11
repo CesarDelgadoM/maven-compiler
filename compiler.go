@@ -9,8 +9,6 @@ import (
 )
 
 func Compile(pathProject string, profile string) error {
-
-	cls()
 	err := os.Chdir(pathProject)
 	if err != nil {
 		Error(err.Error())
