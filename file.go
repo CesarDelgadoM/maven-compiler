@@ -194,8 +194,8 @@ func InitializeApp() {
 
 	// Create folder if not exist
 	pathFolder = currentPath + separator + nameFolder
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		err = os.Mkdir(path, os.ModePerm)
+	if _, err = os.Stat(pathFolder); os.IsNotExist(err) {
+		err = os.Mkdir(pathFolder, os.ModePerm)
 		if err != nil {
 			Error("Cannot create folder: " + err.Error())
 			os.Exit(1)
