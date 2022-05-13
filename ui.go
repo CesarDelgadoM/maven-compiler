@@ -61,6 +61,18 @@ func InputText(text string) string {
 	return op
 }
 
+func InputOption(msgOp string, files []string) int {
+	for {
+		CreateMenu(files)
+		op := InputNumber("[" + msgOp + "] :: ")
+		if op < 0 || op > len(files) {
+			Info("Option not exist, try again!")
+		} else {
+			return op
+		}
+	}
+}
+
 func cls() {
 	cmd := exec.Command("cmd", "/c", "cls")
 	cmd.Stdout = os.Stdout

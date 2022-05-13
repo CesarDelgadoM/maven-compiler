@@ -43,6 +43,7 @@ func MenuFiles() {
 			Info("Option not exist, try again!")
 		}
 		PressEnter()
+		op = -1
 	}
 }
 
@@ -73,32 +74,20 @@ func CreateCompilerFile() {
 
 func EditCompilerFile() {
 
-	CreateMenu(files)
-	op := InputNumber("[editar] :: ")
-	if op <= 0 || op > len(files) {
-		if op == 0 {
-			Info("Saliendo...")
-		} else {
-			Error("Option index out of bounds")
-		}
+	op := InputOption("editar", files)
+	if op == 0 {
+		Info("Saliendo...")
 		return
 	}
-	fileName := files[op-1]
 
+	fileName := files[op-1]
 	path := pathFolder + separator + fileName
 
-	file, err := os.OpenFile(path, os.O_RDWR, 0600)
+	file, err := os.OpenFile(path, os.O_RDWR, os.ModePerm)
 	if err != nil {
 		Error("Cannot open file [" + fileName + "]: " + err.Error())
 		return
 	}
-
-	content, err := os.ReadFile(path)
-	if err != nil {
-		Error("Cannot read the file: " + err.Error())
-		return
-	}
-	Info("Rutas del proyecto: [" + string(content) + "]")
 
 	var pathsProjects string
 	fmt.Println("En caso de ser un solo proyecto ingrese la ruta, de lo contrario ingrese las rutas en orden de compilacion separadas por (,): ")
@@ -120,15 +109,9 @@ func EditCompilerFile() {
 
 func OpenCompilerFile() {
 
-	CreateMenu(files)
-
-	op := InputNumber("[abrir] :: ")
-	if op <= 0 || op > len(files) {
-		if op == 0 {
-			Info("Saliendo...")
-		} else {
-			Error("Option index out of bounds")
-		}
+	op := InputOption("abrir", files)
+	if op == 0 {
+		Info("Saliendo...")
 		return
 	}
 
@@ -148,19 +131,13 @@ func OpenCompilerFile() {
 
 func DeleteCompilerFile() {
 
-	CreateMenu(files)
-
-	op := InputNumber("[eliminar] :: ")
-	if op <= 0 || op > len(files) {
-		if op == 0 {
-			Info("Saliendo...")
-		} else {
-			Error("Option index out of bounds")
-		}
+	op := InputOption("eliminar", files)
+	if op == 0 {
+		Info("Saliendo...")
 		return
 	}
-	fileName := files[op-1]
 
+	fileName := files[op-1]
 	path := pathFolder + separator + fileName
 
 	err := os.Remove(path)

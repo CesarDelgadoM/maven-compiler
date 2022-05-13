@@ -23,6 +23,7 @@ func main() {
 			UpdateCurrentPath()
 		case 2:
 			MenuFiles()
+			continue
 		case 0:
 			Info("Saliendo del compilador...")
 			return
@@ -30,19 +31,15 @@ func main() {
 			Info("Option not exist, try again!")
 		}
 		PressEnter()
+		op = -1
 	}
 }
 
 func CompileProject() {
 
-	CreateMenu(files)
-	op1 := InputNumber("[compilar] :: ")
-	if op1 <= 0 || op1 > len(files) {
-		if op1 == 0 {
-			Info("Saliendo...")
-		} else {
-			Error("Option index out of bounds")
-		}
+	op1 := InputOption("compilar", files)
+	if op1 == 0 {
+		Info("Saliendo...")
 		return
 	}
 
