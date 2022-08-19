@@ -37,13 +37,13 @@ func main() {
 
 func CompileProject() {
 
-	op1 := InputOption("compilar", files)
-	if op1 == 0 {
+	op := InputOption("compilar", files)
+	if op == 0 {
 		Info("Saliendo...")
 		return
 	}
 
-	fileName := files[op1-1]
+	fileName := files[op-1]
 	path := pathFolder + separator + fileName
 
 	content, err := os.ReadFile(path)
@@ -52,10 +52,8 @@ func CompileProject() {
 		return
 	}
 
-	op2 := InputText("Perfil de compilacion?(S/n): ")
-
 	var profile string
-	if strings.ToLower(op2) == "s" {
+	if op := InputText("Perfil de compilacion?(S/n): "); strings.ToLower(op) == "s" {
 		fmt.Print("Nombre perfil: ")
 		fmt.Scanln(&profile)
 	}

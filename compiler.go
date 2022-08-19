@@ -33,8 +33,7 @@ func ExecuteCommand(command string) error {
 		return err
 	}
 
-	err = cmd.Start()
-	if err != nil {
+	if err = cmd.Start(); err != nil {
 		return err
 	}
 
@@ -46,8 +45,7 @@ func ExecuteCommand(command string) error {
 		fmt.Println(m)
 	}
 
-	err = cmd.Wait()
-	if err != nil {
+	if err = cmd.Wait(); err != nil {
 		return err
 	}
 

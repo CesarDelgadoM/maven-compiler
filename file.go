@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -60,10 +61,7 @@ func CreateCompilerFile() {
 		return
 	}
 
-	var pathsProjects string
-	fmt.Println("En caso de ser un solo proyecto ingrese la ruta, de lo contrario ingrese las rutas en orden de compilacion separadas por (,): ")
-	fmt.Print("Rutas: ")
-	fmt.Scanln(&pathsProjects)
+	pathsProjects := InputPaths()
 
 	file.WriteString(pathsProjects)
 	files = append(files, fileName+formatFile)
@@ -89,10 +87,7 @@ func EditCompilerFile() {
 		return
 	}
 
-	var pathsProjects string
-	fmt.Println("En caso de ser un solo proyecto ingrese la ruta, de lo contrario ingrese las rutas en orden de compilacion separadas por (,): ")
-	fmt.Print("Rutas: ")
-	fmt.Scanln(&pathsProjects)
+	pathsProjects := InputPaths()
 
 	if pathsProjects != "" {
 		err = file.Truncate(0)
@@ -105,6 +100,18 @@ func EditCompilerFile() {
 		Info("File not edited, no data")
 	}
 	file.Close()
+}
+
+func InputPaths() (pathsProjects string) {
+
+	fmt.Println("En caso de ser un solo proyecto ingrese la ruta, de lo contrario ingrese las rutas en orden de compilacion separadas por (,): ")
+	fmt.Print("Rutas: ")
+
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	pathsProjects = scanner.Text()
+
+	return
 }
 
 func OpenCompilerFile() {
