@@ -12,17 +12,17 @@ func CompileProject() {
 
 	keys := projects.Keys()
 
-	op := InputOption("compilar", keys)
+	op := InputOption("compile", keys)
 	if strings.EqualFold(op, "0") {
 		Info("Saliendo...")
 		return
 	}
 
-	paths := projects[op]
+	paths := projects.Value(op)
 
 	var profile string
-	if op := InputText("Perfil de compilacion?(S/n): "); strings.ToLower(op) == "s" {
-		fmt.Print("Nombre perfil: ")
+	if op := InputText("Compilation profile?(Y/n): "); strings.ToLower(op) == "y" {
+		fmt.Print("Profile name: ")
 		fmt.Scanln(&profile)
 	}
 
@@ -30,9 +30,10 @@ func CompileProject() {
 	for i := 0; i < size; i++ {
 
 		cls()
-		Info("Compilando el proyecto: " + paths[i])
+		Info("Compiling the project: " + paths[i])
 
 		var err error
+		// Check if it is the last project and if compiles with profile
 		if i == size-1 && profile != "" {
 			err = Compile(paths[i], profile)
 		} else {
@@ -48,6 +49,7 @@ func CompileProject() {
 	PressEnter()
 }
 
+// Compiles projects of maven type
 func Compile(pathProject string, profile string) error {
 	err := os.Chdir(pathProject)
 	if err != nil {
@@ -65,6 +67,7 @@ func Compile(pathProject string, profile string) error {
 	return err
 }
 
+// Execute commands of the windows system
 func ExecuteCommand(command string) error {
 	cmd := exec.Command("cmd", strings.Split(command, " ")...)
 

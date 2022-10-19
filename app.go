@@ -15,11 +15,32 @@ const (
 var pathFile string
 var projects project = make(project, 100)
 
-func MenuFiles() {
+func StartApp() {
+	var op int
+	for {
+		MenuCompiler()
+		fmt.Print("[option] :: ")
+		fmt.Scanln(&op)
+		PrintLine()
+
+		switch op {
+		case 1:
+			CompileProject()
+		case 2:
+			MenuProjects()
+		case 0:
+			Exit()
+		default:
+			Info("Option not exist, try again!")
+			continue
+		}
+	}
+}
+
+func MenuProjects() {
 
 	var op int
-	var exit bool
-	for !exit {
+	for {
 		MenuFilesOptions()
 		fmt.Print("[option] :: ")
 		fmt.Scanln(&op)
@@ -36,10 +57,10 @@ func MenuFiles() {
 		case 5:
 			ListNamesProjects()
 		case 0:
-			Info("Saliendo...")
-			exit = true
+			return
 		default:
 			Info("Option not exist, try again!")
+			continue
 		}
 	}
 }
@@ -50,8 +71,10 @@ func CrateProject() {
 	PrintLine()
 
 	paths := InputPaths()
-	fmt.Println(paths)
 	projects[name] = paths
+
+	Info("Project create successfully")
+	PressEnter()
 
 	defer WriteFile(pathFile, projects)
 }
@@ -59,16 +82,14 @@ func CrateProject() {
 func OpenProject() {
 
 	keys := projects.Keys()
-
 	op := InputOption("open", keys)
 	if strings.EqualFold(op, "0") {
-		Info("Saliendo...")
 		return
 	}
 
 	PrintLine()
 	paths := projects.Value(op)
-	for p := range paths {
+	for _, p := range paths {
 		fmt.Println("->", p)
 	}
 	PrintLine()
@@ -78,15 +99,16 @@ func OpenProject() {
 func EditProject() {
 
 	keys := projects.Keys()
-
 	op := InputOption("edit", keys)
 	if strings.EqualFold(op, "0") {
-		Info("Saliendo...")
 		return
 	}
 
 	paths := InputPaths()
 	projects[op] = paths
+
+	Info("Project updated successfully")
+	PressEnter()
 
 	defer WriteFile(pathFile, projects)
 }
@@ -94,21 +116,22 @@ func EditProject() {
 func DeleteProject() {
 
 	keys := projects.Keys()
-
-	op := InputOption("name", keys)
+	op := InputOption("delete", keys)
 	if strings.EqualFold(op, "0") {
-		Info("Saliendo...")
 		return
 	}
 
 	delete(projects, op)
+
+	Info("Project deleted successfully")
+	PressEnter()
 
 	defer WriteFile(pathFile, projects)
 }
 
 func InputPaths() []string {
 
-	fmt.Println("En caso de ser un solo proyecto ingrese la ruta, de lo contrario ingrese las rutas en orden de compilacion separadas por (,): ")
+	fmt.Println("Enter project paths in order and separated by (,): ")
 	fmt.Print("Paths: ")
 
 	scanner := bufio.NewScanner(os.Stdin)

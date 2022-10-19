@@ -4,14 +4,15 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"time"
 )
 
-func Menu() {
+func MenuCompiler() {
 	cls()
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("                           [MAVEN COMPILER]                           ")
 	fmt.Println("------------------------------------------------------------------------")
-	fmt.Println("[1] :: [Compile a project]")
+	fmt.Println("[1] :: [Compile project]")
 	fmt.Println("[2] :: [Menu projects]")
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("[0] :: [Exit]")
@@ -39,7 +40,7 @@ func CreateMenu(items []string) {
 	fmt.Println("                          [PROJECTS]                          ")
 	fmt.Println("------------------------------------------------------------------------")
 	for _, item := range items {
-		fmt.Println("->[" + item + "]")
+		fmt.Println("[*] :: [" + item + "]")
 	}
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("[0] :: [Back]")
@@ -73,10 +74,9 @@ func ListNamesProjects() {
 	fmt.Println("                         [PROJECTS]                         ")
 	fmt.Println("------------------------------------------------------------------------")
 	for key := range projects {
-		fmt.Println("->[" + key + "]")
+		fmt.Println("[*] :: [" + key + "]")
 	}
 	PrintLine()
-	PressEnter()
 }
 
 func PressEnter() {
@@ -101,6 +101,16 @@ func Error(msg interface{}) {
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("[ERROR]", msg)
 	fmt.Println("------------------------------------------------------------------------")
+}
+
+func Exit() {
+	cls()
+	fmt.Println("------------------------------------------------------------------------")
+	fmt.Println("[GOODBYE...]")
+	fmt.Println("------------------------------------------------------------------------")
+	time.Sleep(1 * time.Second)
+	cls()
+	os.Exit(0) // No-Error
 }
 
 func PrintLine() {

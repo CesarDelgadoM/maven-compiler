@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -13,31 +12,13 @@ func main() {
 		return
 	}
 
-	var op int
-	for {
-		Menu()
-		fmt.Print("[option] :: ")
-		fmt.Scanln(&op)
-		PrintLine()
-
-		switch op {
-		case 1:
-			CompileProject()
-		case 2:
-			MenuFiles()
-			continue
-		case 0:
-			Info("Saliendo del compilador...")
-			os.Exit(0) // No-Error
-		default:
-			Info("Option not exist, try again!")
-		}
-	}
+	StartApp()
 }
 
+// Create the file for projects the first time the app is executed
 func InitializeApp() error {
 
-	// Get path of the current directory on the variable currentPath
+	// Get path of the current directory
 	dir, err := os.Getwd()
 	if err != nil {
 		Error("Cannot get path directory: " + err.Error())
