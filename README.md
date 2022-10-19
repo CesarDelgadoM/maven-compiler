@@ -19,4 +19,10 @@ go build
 
 ## UI
 
-![screenshot-ui.png](https://raw.githubusercontent.com/CesarDelgadoM/maven-compiler/main/screenshot-ui.png)
+Initial Menu
+
+![screenshot-ui-1.png](https://raw.githubusercontent.com/CesarDelgadoM/maven-compiler/new_app_version/screenshot-ui-1.png)
+
+Menu Projects
+
+![screenshot-ui-2.png](https://raw.githubusercontent.com/CesarDelgadoM/maven-compiler/new_app_version/screenshot-ui-2.png)
