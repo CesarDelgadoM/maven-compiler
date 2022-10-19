@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strconv"
 )
 
 func Menu() {
@@ -13,7 +12,7 @@ func Menu() {
 	fmt.Println("                           [MAVEN COMPILER]                           ")
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("[1] :: [Compile a project]")
-	fmt.Println("[2] :: [Menu]")
+	fmt.Println("[2] :: [Menu projects]")
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("[0] :: [Exit]")
 	fmt.Println("------------------------------------------------------------------------")
@@ -22,12 +21,13 @@ func Menu() {
 func MenuFilesOptions() {
 	cls()
 	fmt.Println("------------------------------------------------------------------------")
-	fmt.Println("                           [MENU  ARCHIVOS]                             ")
+	fmt.Println("                           [MENU  PROJECTS]                             ")
 	fmt.Println("------------------------------------------------------------------------")
-	fmt.Println("[2] :: [Open project routes]")
-	fmt.Println("[3] :: [Edit project routes]")
+	fmt.Println("[1] :: [Create project]")
+	fmt.Println("[2] :: [Open project]")
+	fmt.Println("[3] :: [Edit project]")
 	fmt.Println("[4] :: [Delete project]")
-	fmt.Println("[5] :: [See all projects]")
+	fmt.Println("[5] :: [View projects]")
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("[0] :: [Back]")
 	fmt.Println("------------------------------------------------------------------------")
@@ -36,13 +36,13 @@ func MenuFilesOptions() {
 func CreateMenu(items []string) {
 	cls()
 	fmt.Println("------------------------------------------------------------------------")
-	fmt.Println("                          [ARCHIVOS PROYECTOS]                          ")
+	fmt.Println("                          [PROJECTS]                          ")
 	fmt.Println("------------------------------------------------------------------------")
-	for i, item := range items {
-		fmt.Println("[" + strconv.Itoa(i+1) + "] :: [" + item + "]")
+	for _, item := range items {
+		fmt.Println("->[" + item + "]")
 	}
 	fmt.Println("------------------------------------------------------------------------")
-	fmt.Println("[0] :: [Volver]")
+	fmt.Println("[0] :: [Back]")
 	fmt.Println("------------------------------------------------------------------------")
 }
 
@@ -60,22 +60,23 @@ func InputText(text string) string {
 	return op
 }
 
-func InputOption(msgOp string, files []string) int {
-	for {
-		CreateMenu(files)
-		op := InputNumber("[" + msgOp + "] :: ")
-		if op < 0 || op > len(files) {
-			Info("Option not exist, try again!")
-		} else {
-			return op
-		}
-	}
+func InputOption(msgOp string, keys []string) string {
+
+	CreateMenu(keys)
+	op := InputText("[" + msgOp + "] :: ")
+	return op
 }
 
-func cls() {
-	cmd := exec.Command("cmd", "/c", "cls")
-	cmd.Stdout = os.Stdout
-	cmd.Run()
+func ListNamesProjects() {
+	cls()
+	fmt.Println("------------------------------------------------------------------------")
+	fmt.Println("                         [PROJECTS]                         ")
+	fmt.Println("------------------------------------------------------------------------")
+	for key := range projects {
+		fmt.Println("->[" + key + "]")
+	}
+	PrintLine()
+	PressEnter()
 }
 
 func PressEnter() {
@@ -84,13 +85,19 @@ func PressEnter() {
 	fmt.Scanln(&enter)
 }
 
-func Info(msg string) {
+func cls() {
+	cmd := exec.Command("cmd", "/c", "cls")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
+
+func Info(msg interface{}) {
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("[INFO]", msg)
 	fmt.Println("------------------------------------------------------------------------")
 }
 
-func Error(msg string) {
+func Error(msg interface{}) {
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("[ERROR]", msg)
 	fmt.Println("------------------------------------------------------------------------")

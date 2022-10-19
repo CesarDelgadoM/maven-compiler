@@ -2,79 +2,68 @@ package main
 
 import (
 	"fmt"
+	"os"
 )
 
 func main() {
 
 	err := InitializeApp()
 	if err != nil {
-		Error("To initialize app")
+		Error("Error to initialize the app")
 		return
 	}
 
-	var op int = -1
-	for op != 0 {
+	var op int
+	for {
 		Menu()
-		fmt.Print("[opcion] :: ")
+		fmt.Print("[option] :: ")
 		fmt.Scanln(&op)
 		PrintLine()
 
 		switch op {
 		case 1:
-			//CompileProject()
+			CompileProject()
 		case 2:
 			MenuFiles()
 			continue
 		case 0:
 			Info("Saliendo del compilador...")
-			return
+			os.Exit(0) // No-Error
 		default:
 			Info("Option not exist, try again!")
 		}
-		PressEnter()
-		op = -1
 	}
 }
 
-// func CompileProject() {
+func InitializeApp() error {
 
-// 	op := InputOption("compilar", files)
-// 	if op == 0 {
-// 		Info("Saliendo...")
-// 		return
-// 	}
+	// Get path of the current directory on the variable currentPath
+	dir, err := os.Getwd()
+	if err != nil {
+		Error("Cannot get path directory: " + err.Error())
+		os.Exit(1)
+	}
 
-// 	fileName := files[op-1]
-// 	path := pathFolder + separator + fileName
+	pathFile = dir + separator + fileName
 
-// 	content, err := os.ReadFile(path)
-// 	if err != nil {
-// 		Error("Cannot read the file: " + err.Error())
-// 		return
-// 	}
+	// Validates if the file exists
+	_, err = os.Stat(fileName)
+	if err == nil {
+		readFile(pathFile)
+		return nil
+	}
 
-// 	var profile string
-// 	if op := InputText("Perfil de compilacion?(S/n): "); strings.ToLower(op) == "s" {
-// 		fmt.Print("Nombre perfil: ")
-// 		fmt.Scanln(&profile)
-// 	}
+	_, err = os.Create(pathFile)
+	if err != nil {
+		Error("Cannot create file [" + fileName + "]: " + err.Error())
+		return err
+	}
 
-// 	pathsProjects := strings.Split(string(content), ",")
-// 	size := len(pathsProjects)
+	err = hiddenFile(pathFile)
+	if err != nil {
+		Error("Error to hide the file")
+		return err
+	}
 
-// 	for i := 0; i < size; i++ {
-// 		cls()
-// 		Info("Compilando el proyecto: " + pathsProjects[i])
-
-// 		if i == size-1 && profile != "" {
-// 			err = Compile(pathsProjects[i], profile)
-// 		} else {
-// 			err = Compile(pathsProjects[i], "")
-// 		}
-// 		if err != nil {
-// 			Error("project compilation failed: " + err.Error())
-// 			return
-// 		}
-// 	}
-// 	Info("Compilation of the project successfully")
-// }
+	return nil
+}

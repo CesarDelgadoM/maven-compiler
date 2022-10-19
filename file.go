@@ -10,13 +10,13 @@ func readFile(path string) {
 
 	file, err := os.ReadFile(path)
 	if err != nil {
-		Error("Error to read file")
+		Error("Error to read the file")
 		return
 	}
 
 	err = json.Unmarshal([]byte(file), &projects)
 	if err != nil {
-		Error(err.Error())
+		Error(err)
 		return
 	}
 }
@@ -39,17 +39,30 @@ func hiddenFile(path string) error {
 	return nil
 }
 
-func WriteFile(path string, data []project) {
+func WriteFile(path string, data project) {
 
-	file, err := json.MarshalIndent(data, "", " ")
+	datajson, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
-		Error(err.Error())
+		Error(err)
 		return
 	}
 
-	err = os.WriteFile(path, file, os.ModePerm)
+	file, err := os.OpenFile(path, os.O_RDWR, os.ModePerm)
 	if err != nil {
-		Error(err.Error())
+		Error(err)
+		return
+	}
+	defer file.Close()
+
+	err = file.Truncate(0)
+	if err != nil {
+		Error(err)
+		return
+	}
+
+	_, err = file.Write(datajson)
+	if err != nil {
+		Error(err)
 		return
 	}
 }

@@ -9,103 +9,111 @@ import (
 
 const (
 	separator string = "\\"
-	fileName  string = ".projects-routes.json"
+	fileName  string = ".projects-paths.json"
 )
 
 var pathFile string
-
-type project map[string][]string
-
-var projects []project
+var projects project = make(project, 100)
 
 func MenuFiles() {
 
-	var op int = -1
-	for op != 0 {
+	var op int
+	var exit bool
+	for !exit {
 		MenuFilesOptions()
-		fmt.Print("[opcion] :: ")
+		fmt.Print("[option] :: ")
 		fmt.Scanln(&op)
 
 		switch op {
 		case 1:
-			CrateCompilationProject()
+			CrateProject()
+		case 2:
+			OpenProject()
+		case 3:
+			EditProject()
+		case 4:
+			DeleteProject()
+		case 5:
+			ListNamesProjects()
 		case 0:
 			Info("Saliendo...")
-			return
+			exit = true
 		default:
 			Info("Option not exist, try again!")
 		}
-		PressEnter()
-		op = -1
 	}
 }
 
-func CrateCompilationProject() {
+func CrateProject() {
 
 	name := InputText("Type the name of the project: ")
 	PrintLine()
 
 	paths := InputPaths()
+	fmt.Println(paths)
+	projects[name] = paths
 
-	projects = append(projects, project{name: paths})
-
-	WriteFile(pathFile, projects)
+	defer WriteFile(pathFile, projects)
 }
 
-func InputPaths() (paths []string) {
+func OpenProject() {
+
+	keys := projects.Keys()
+
+	op := InputOption("open", keys)
+	if strings.EqualFold(op, "0") {
+		Info("Saliendo...")
+		return
+	}
+
+	PrintLine()
+	paths := projects.Value(op)
+	for p := range paths {
+		fmt.Println("->", p)
+	}
+	PrintLine()
+	PressEnter()
+}
+
+func EditProject() {
+
+	keys := projects.Keys()
+
+	op := InputOption("edit", keys)
+	if strings.EqualFold(op, "0") {
+		Info("Saliendo...")
+		return
+	}
+
+	paths := InputPaths()
+	projects[op] = paths
+
+	defer WriteFile(pathFile, projects)
+}
+
+func DeleteProject() {
+
+	keys := projects.Keys()
+
+	op := InputOption("name", keys)
+	if strings.EqualFold(op, "0") {
+		Info("Saliendo...")
+		return
+	}
+
+	delete(projects, op)
+
+	defer WriteFile(pathFile, projects)
+}
+
+func InputPaths() []string {
 
 	fmt.Println("En caso de ser un solo proyecto ingrese la ruta, de lo contrario ingrese las rutas en orden de compilacion separadas por (,): ")
-	fmt.Print("Rutas: ")
+	fmt.Print("Paths: ")
 
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	pathsProjects := scanner.Text()
 
-	paths = strings.Split(pathsProjects, ",")
-
-	return
-}
-
-// func ListCompilerFiles() {
-// 	cls()
-// 	fmt.Println("------------------------------------------------------------------------")
-// 	fmt.Println("                         [ARCHIVOS COMPILACION]                         ")
-// 	fmt.Println("------------------------------------------------------------------------")
-// 	for _, file := range files {
-// 		fmt.Println("->[" + file + "]")
-// 	}
-// 	PrintLine()
-// }
-
-func InitializeApp() error {
-
-	// Get path of the current directory on the variable currentPath
-	path, err := os.Getwd()
-	if err != nil {
-		Error("Cannot get path directory: " + err.Error())
-		os.Exit(1)
-	}
-
-	pathFile = path + separator + fileName
-
-	_, err = os.Stat(fileName)
-	if err == nil {
-		Info("File Exist!")
-		readFile(pathFile)
-		return nil
-	}
-
-	_, err = os.Create(pathFile)
-	if err != nil {
-		Error("Cannot create file [" + fileName + "]: " + err.Error())
-		return err
-	}
-
-	err = hiddenFile(pathFile)
-	if err != nil {
-		Error("Error to hide the file")
-		return err
-	}
-
-	return nil
+	return strings.Split(pathsProjects, ",")
 }
