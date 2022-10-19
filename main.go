@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"strings"
 )
 
 func main() {
 
-	InitializeApp()
+	err := InitializeApp()
+	if err != nil {
+		Error("To initialize app")
+		return
+	}
 
 	var op int = -1
 	for op != 0 {
@@ -19,8 +21,7 @@ func main() {
 
 		switch op {
 		case 1:
-			CompileProject()
-			UpdateCurrentPath()
+			//CompileProject()
 		case 2:
 			MenuFiles()
 			continue
@@ -35,45 +36,45 @@ func main() {
 	}
 }
 
-func CompileProject() {
+// func CompileProject() {
 
-	op := InputOption("compilar", files)
-	if op == 0 {
-		Info("Saliendo...")
-		return
-	}
+// 	op := InputOption("compilar", files)
+// 	if op == 0 {
+// 		Info("Saliendo...")
+// 		return
+// 	}
 
-	fileName := files[op-1]
-	path := pathFolder + separator + fileName
+// 	fileName := files[op-1]
+// 	path := pathFolder + separator + fileName
 
-	content, err := os.ReadFile(path)
-	if err != nil {
-		Error("Cannot read the file: " + err.Error())
-		return
-	}
+// 	content, err := os.ReadFile(path)
+// 	if err != nil {
+// 		Error("Cannot read the file: " + err.Error())
+// 		return
+// 	}
 
-	var profile string
-	if op := InputText("Perfil de compilacion?(S/n): "); strings.ToLower(op) == "s" {
-		fmt.Print("Nombre perfil: ")
-		fmt.Scanln(&profile)
-	}
+// 	var profile string
+// 	if op := InputText("Perfil de compilacion?(S/n): "); strings.ToLower(op) == "s" {
+// 		fmt.Print("Nombre perfil: ")
+// 		fmt.Scanln(&profile)
+// 	}
 
-	pathsProjects := strings.Split(string(content), ",")
-	size := len(pathsProjects)
+// 	pathsProjects := strings.Split(string(content), ",")
+// 	size := len(pathsProjects)
 
-	for i := 0; i < size; i++ {
-		cls()
-		Info("Compilando el proyecto: " + pathsProjects[i])
+// 	for i := 0; i < size; i++ {
+// 		cls()
+// 		Info("Compilando el proyecto: " + pathsProjects[i])
 
-		if i == size-1 && profile != "" {
-			err = Compile(pathsProjects[i], profile)
-		} else {
-			err = Compile(pathsProjects[i], "")
-		}
-		if err != nil {
-			Error("project compilation failed: " + err.Error())
-			return
-		}
-	}
-	Info("Compilation of the project successfully")
-}
+// 		if i == size-1 && profile != "" {
+// 			err = Compile(pathsProjects[i], profile)
+// 		} else {
+// 			err = Compile(pathsProjects[i], "")
+// 		}
+// 		if err != nil {
+// 			Error("project compilation failed: " + err.Error())
+// 			return
+// 		}
+// 	}
+// 	Info("Compilation of the project successfully")
+// }

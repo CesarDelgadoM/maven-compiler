@@ -10,12 +10,12 @@ import (
 func Menu() {
 	cls()
 	fmt.Println("------------------------------------------------------------------------")
-	fmt.Println("                           [COMPILADOR MAVEN]                           ")
+	fmt.Println("                           [MAVEN COMPILER]                           ")
 	fmt.Println("------------------------------------------------------------------------")
-	fmt.Println("[1] :: [Compilar un proyecto]")
-	fmt.Println("[2] :: [Menu archivos de compilacion]")
+	fmt.Println("[1] :: [Compile a project]")
+	fmt.Println("[2] :: [Menu]")
 	fmt.Println("------------------------------------------------------------------------")
-	fmt.Println("[0] :: [Salir]")
+	fmt.Println("[0] :: [Exit]")
 	fmt.Println("------------------------------------------------------------------------")
 }
 
@@ -24,13 +24,12 @@ func MenuFilesOptions() {
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("                           [MENU  ARCHIVOS]                             ")
 	fmt.Println("------------------------------------------------------------------------")
-	fmt.Println("[1] :: [Crear archivo de compilacion]")
-	fmt.Println("[2] :: [Abrir archivo de compilacion]")
-	fmt.Println("[3] :: [Editar archivo de compilacion]")
-	fmt.Println("[4] :: [Eliminar archivo de compilacion]")
-	fmt.Println("[5] :: [Ver archivos de compilacion]")
+	fmt.Println("[2] :: [Open project routes]")
+	fmt.Println("[3] :: [Edit project routes]")
+	fmt.Println("[4] :: [Delete project]")
+	fmt.Println("[5] :: [See all projects]")
 	fmt.Println("------------------------------------------------------------------------")
-	fmt.Println("[0] :: [Volver]")
+	fmt.Println("[0] :: [Back]")
 	fmt.Println("------------------------------------------------------------------------")
 }
 
