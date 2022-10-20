@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	separator string = "\\"
-	fileName  string = ".projects-paths.json"
+	SEPARATOR string = "\\"
+	FILE_NAME string = ".projects-paths.json"
 )
 
 var pathFile string

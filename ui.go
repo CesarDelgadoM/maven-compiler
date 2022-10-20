@@ -48,7 +48,7 @@ func CreateMenu(items []string) {
 }
 
 func InputNumber(text string) int {
-	var op int
+	var op int = -1
 	fmt.Print(text)
 	fmt.Scanln(&op)
 	return op
@@ -103,13 +103,13 @@ func cls() {
 	cmd.Run()
 }
 
-func Info(msg interface{}) {
+func Info(msg ...interface{}) {
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("[INFO]", msg)
 	fmt.Println("------------------------------------------------------------------------")
 }
 
-func Error(msg interface{}) {
+func Error(msg ...interface{}) {
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("[ERROR]", msg)
 	fmt.Println("------------------------------------------------------------------------")

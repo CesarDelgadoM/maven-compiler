@@ -25,10 +25,10 @@ func InitializeApp() error {
 		os.Exit(1)
 	}
 
-	pathFile = dir + separator + fileName
+	pathFile = dir + SEPARATOR + FILE_NAME
 
 	// Validates if the file exists
-	_, err = os.Stat(fileName)
+	_, err = os.Stat(FILE_NAME)
 	if err == nil {
 		readFile(pathFile)
 		return nil
@@ -36,7 +36,7 @@ func InitializeApp() error {
 
 	_, err = os.Create(pathFile)
 	if err != nil {
-		Error("Cannot create file [" + fileName + "]: " + err.Error())
+		Error("Cannot create file [" + FILE_NAME + "]: " + err.Error())
 		return err
 	}
 
