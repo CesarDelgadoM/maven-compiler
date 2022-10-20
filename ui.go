@@ -61,11 +61,22 @@ func InputText(text string) string {
 	return op
 }
 
-func InputOption(msgOp string, keys []string) string {
+// Check the input of the user.
+//
+// Returns the name of the project and bool if option is back == 0.
+func InputOption(msgOp string, keys []string) (string, bool) {
 
-	CreateMenu(keys)
-	op := InputText("[" + msgOp + "] :: ")
-	return op
+	for {
+		CreateMenu(keys)
+		op := InputText("[" + msgOp + "] :: ")
+		if op == "0" {
+			return "", true
+		}
+		_, exist := projects[op]
+		if exist {
+			return op, false
+		}
+	}
 }
 
 func ListNamesProjects() {
@@ -77,6 +88,7 @@ func ListNamesProjects() {
 		fmt.Println("[*] :: [" + key + "]")
 	}
 	PrintLine()
+	PressEnter()
 }
 
 func PressEnter() {
@@ -111,6 +123,13 @@ func Exit() {
 	time.Sleep(1 * time.Second)
 	cls()
 	os.Exit(0) // No-Error
+}
+
+func OptionNotExist() {
+	fmt.Println("------------------------------------------------------------------------")
+	Info("Option not exist, try again!")
+	fmt.Println("------------------------------------------------------------------------")
+	time.Sleep(1 * time.Second)
 }
 
 func PrintLine() {

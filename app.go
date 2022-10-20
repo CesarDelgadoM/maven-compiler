@@ -16,12 +16,9 @@ var pathFile string
 var projects project = make(project, 100)
 
 func StartApp() {
-	var op int
 	for {
 		MenuCompiler()
-		fmt.Print("[option] :: ")
-		fmt.Scanln(&op)
-		PrintLine()
+		op := InputNumber("[option] :: ")
 
 		switch op {
 		case 1:
@@ -31,7 +28,7 @@ func StartApp() {
 		case 0:
 			Exit()
 		default:
-			Info("Option not exist, try again!")
+			OptionNotExist()
 			continue
 		}
 	}
@@ -59,7 +56,7 @@ func MenuProjects() {
 		case 0:
 			return
 		default:
-			Info("Option not exist, try again!")
+			OptionNotExist()
 			continue
 		}
 	}
@@ -82,8 +79,8 @@ func CrateProject() {
 func OpenProject() {
 
 	keys := projects.Keys()
-	op := InputOption("open", keys)
-	if strings.EqualFold(op, "0") {
+	op, back := InputOption("open", keys)
+	if back {
 		return
 	}
 
@@ -99,8 +96,8 @@ func OpenProject() {
 func EditProject() {
 
 	keys := projects.Keys()
-	op := InputOption("edit", keys)
-	if strings.EqualFold(op, "0") {
+	op, back := InputOption("edit", keys)
+	if back {
 		return
 	}
 
@@ -116,8 +113,8 @@ func EditProject() {
 func DeleteProject() {
 
 	keys := projects.Keys()
-	op := InputOption("delete", keys)
-	if strings.EqualFold(op, "0") {
+	op, back := InputOption("delete", keys)
+	if back {
 		return
 	}
 

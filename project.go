@@ -15,12 +15,6 @@ func (p project) Keys() []string {
 	return keys
 }
 
-func (p project) Key(index int) string {
-
-	keys := p.Keys()
-	return keys[index-1]
-}
-
 func (p project) Value(key string) []string {
 
 	return p[key]

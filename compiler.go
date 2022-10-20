@@ -12,9 +12,8 @@ func CompileProject() {
 
 	keys := projects.Keys()
 
-	op := InputOption("compile", keys)
-	if strings.EqualFold(op, "0") {
-		Info("Saliendo...")
+	op, exit := InputOption("compile", keys)
+	if exit {
 		return
 	}
 
@@ -42,6 +41,7 @@ func CompileProject() {
 
 		if err != nil {
 			Error("project compilation failed: " + err.Error())
+			PressEnter()
 			return
 		}
 	}
@@ -54,6 +54,7 @@ func Compile(pathProject string, profile string) error {
 	err := os.Chdir(pathProject)
 	if err != nil {
 		Error(err.Error())
+		return err
 	}
 
 	var command string

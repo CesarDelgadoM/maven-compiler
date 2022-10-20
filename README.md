@@ -14,7 +14,7 @@ go run .\
 
 ```bash
 go build 
-./maven-compiler.exe
+.\maven-compiler.exe
 ```
 
 ## UI
